@@ -65,13 +65,16 @@ function proxyRequest(location, req, res, agent, pipe = false) {
           res.set('Content-Type', proxyRes.headers['content-type']);
         }
       }
-      res.url = proxyRes.responseUrl || proxyRes.url;
       
       if (!res.finished) {
         if (pipe) {
           proxyRes.pipe(res);
         }
         else {
+          if (proxyRes.responseUrl !== proxyRes.url) {
+            console.log('redirect exists');
+            res.set('Redirect-To', proxyRes.responseUrl);
+          }
           res.end();
         }
       }
@@ -82,7 +85,7 @@ function proxyRequest(location, req, res, agent, pipe = false) {
     .end();
   
   if (pipe) {
-    req.pipe(proxyReq); 
+    req.pipe(proxyReq);
   }
   return proxyReq;
 }

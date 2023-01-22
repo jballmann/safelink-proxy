@@ -72,8 +72,7 @@ function proxyRequest(location, req, res, agent, pipe = false) {
         }
         else {
           if (proxyRes.responseUrl !== proxyRes.url) {
-            console.log('redirect exists');
-            res.set('Redirect-To', proxyRes.responseUrl);
+            return res.send(proxyRes.responseUrl);
           }
           res.end();
         }
